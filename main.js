@@ -1,6 +1,13 @@
-function setup() {
+  noseX = 0;
+  noseY = 0;
+  difference = 0;
+  leftWristX = 0;
+  rightWristX = 0;
+
+  
+  function setup() {
     video = createCapture(VIDEO);
-    video.size(350, 350);
+    video.size(400, 400);
 
     canvas = createCanvas(550, 500)
     canvas.position(500, 60);
@@ -10,12 +17,7 @@ function setup() {
   }
 
   function modelLoaded() {
-    console.log('Nothing To See Here Move On');
-  }
-
-  function draw() {
-     image(video, 0, 0, 100, 100);
-     background('#ff0000');
+    console.log(' PoseNet is Initaialized!');
   }
 
 function gotPoses (results) 
@@ -23,5 +25,23 @@ function gotPoses (results)
     if(results.length > 0)
     {
         console.log(results);
+        noseX = results[0].pose.nose.x;
+        noseY = results[0].pose.nose.y;
+        console.log("noseX = " +noseX+ "noseY = " +noseY)
+        leftWristX = results[0].pose.leftWrist.x;
+        rightWristX = results[0].pose.rightWrist.x;
+        difference = leftWristX - rightWristX;
+
+        console.log("leftWristX = " + leftWristX + "rightWristX = " + rightWristX + "difference = " + difference);
     }
 }
+
+function draw() {
+  background('#969A97');
+
+  document.getElementById("square_sides").innerHTML = "Width And Height of a Square will be = " + difference + "px";
+  fill('#F90093');
+  stroke('#F90093')
+  square(noseX, noseY, difference);
+ }
+
